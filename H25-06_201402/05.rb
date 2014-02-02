@@ -13,6 +13,9 @@ score = 0
 # 残り
 nokori = 2
 
+# ゲームエンド
+game_end = false
+
 background = Canvas.new
 score_board = Canvas.new
 remaining_display = Canvas.new(x: 0, y: 450, width: 300, height: 80)
@@ -74,6 +77,20 @@ racket.on(:key_down, K_RIGHT) do
   self.x += 5
 end
 
+racket.on(:key_down, K_SPACE) do
+  if game_end
+    ball.turn
+    ball.x = 50
+    ball.y = land
+    ball.visible = true
+    racket.x = 40
+    racket.y = 200
+    score = 0
+    nokori = 2
+    game_end = false
+  end
+end
+
 # ボール
 ball.on(:start) do
   # ボールを表示
@@ -113,8 +130,10 @@ ball.on(:start) do
         nokori -= 1
       else
         nokori -= 1
-        vanish
-        break
+        ball.x = 0
+        ball.y = 0
+        ball.visible = false
+        game_end = true
       end
     end
   end
